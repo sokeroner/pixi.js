@@ -28,8 +28,9 @@ var BaseTexture = require('./BaseTexture'),
  * @memberof PIXI
  * @param source {HTMLVideoElement}
  * @param [scaleMode] {number} See {@link PIXI.SCALE_MODES} for possible values
+ * @param [autoplay=true] {boolean} Specifies if the video will start playing as soon as it is ready
  */
-function VideoBaseTexture(source, scaleMode)
+function VideoBaseTexture(source, scaleMode, autoplay)
 {
     if (!source)
     {
@@ -45,6 +46,8 @@ function VideoBaseTexture(source, scaleMode)
     }
 
     BaseTexture.call(this, source, scaleMode);
+
+    this.autoplay = autoplay != undefined ? autoplay : true;
 
     /**
      * Should the base texture automatically update itself, set to true by default
@@ -129,7 +132,9 @@ VideoBaseTexture.prototype._onCanPlay = function ()
         this.width = this.source.videoWidth;
         this.height = this.source.videoHeight;
 
-        this.source.play();
+        if (this.autoplay){
+            this.source.play();
+        }
 
         // prevent multiple loaded dispatches..
         if (!this.__loaded)
@@ -161,10 +166,13 @@ VideoBaseTexture.prototype.destroy = function ()
  * @static
  * @param video {HTMLVideoElement}
  * @param scaleMode {number} See {@link PIXI.SCALE_MODES} for possible values
+ * @param [autoplay=true] {boolean} Specifies if the video will start playing as soon as it is ready
  * @return {PIXI.VideoBaseTexture}
  */
-VideoBaseTexture.fromVideo = function (video, scaleMode)
+VideoBaseTexture.fromVideo = function (video, scaleMode, autoplay)
 {
+    autoplay = autoplay != undefined ? autoplay : true;
+
     if (!video._pixiId)
     {
         video._pixiId = 'video_' + utils.uid();
@@ -174,7 +182,7 @@ VideoBaseTexture.fromVideo = function (video, scaleMode)
 
     if (!baseTexture)
     {
-        baseTexture = new VideoBaseTexture(video, scaleMode);
+        baseTexture = new VideoBaseTexture(video, scaleMode, autoplay);
         utils.BaseTextureCache[ video._pixiId ] = baseTexture;
     }
 
@@ -191,10 +199,13 @@ VideoBaseTexture.fromVideo = function (video, scaleMode)
  * @param [videoSrc.mime] {string} The mimetype of the video (e.g. 'video/mp4'). If not specified
  *  the url's extension will be used as the second part of the mime type.
  * @param scaleMode {number} See {@link PIXI.SCALE_MODES} for possible values
+ * @param [autoplay=true] {boolean} Specifies if the video will start playing as soon as it is ready
  * @return {PIXI.VideoBaseTexture}
  */
-VideoBaseTexture.fromUrl = function (videoSrc, scaleMode)
+VideoBaseTexture.fromUrl = function (videoSrc, scaleMode, autoplay)
 {
+    autoplay = autoplay != undefined ? autoplay : true;
+
     var video = document.createElement('video');
 
     // array of objects or strings
@@ -212,9 +223,12 @@ VideoBaseTexture.fromUrl = function (videoSrc, scaleMode)
     }
 
     video.load();
-    video.play();
+    if (autoplay)
+    {
+        video.play();
+    }
 
-    return VideoBaseTexture.fromVideo(video, scaleMode);
+    return VideoBaseTexture.fromVideo(video, scaleMode, autoplay);
 };
 
 VideoBaseTexture.fromUrls = VideoBaseTexture.fromUrl;
