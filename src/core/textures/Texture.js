@@ -1,5 +1,6 @@
 var BaseTexture = require('./BaseTexture'),
     VideoBaseTexture = require('./VideoBaseTexture'),
+    CanvasVideoBaseTexture = require('./CanvasVideoBaseTexture'),
     TextureUvs = require('./TextureUvs'),
     EventEmitter = require('eventemitter3'),
     math = require('../math'),
@@ -344,13 +345,26 @@ Texture.fromFrame = function (frameId)
  * Helper function that creates a new Texture based on the given canvas element.
  *
  * @static
- * @param canvas {Canvas} The canvas element source of the texture
+ * @param canvasvideo {CanvasVideo} The canvasvideo object source of the texture
  * @param scaleMode {number} See {@link PIXI.SCALE_MODES} for possible values
  * @return {PIXI.Texture}
  */
 Texture.fromCanvas = function (canvas, scaleMode)
 {
     return new Texture(BaseTexture.fromCanvas(canvas, scaleMode));
+};
+
+/**
+ * Helper function that creates a new Texture based on the given canvas element.
+ *
+ * @static
+ * @param canvas {Canvas} The canvas element source of the texture
+ * @param scaleMode {number} See {@link PIXI.SCALE_MODES} for possible values
+ * @return {PIXI.Texture}
+ */
+Texture.fromCanvasVideo = function (canvasvideo, scaleMode)
+{
+    return new Texture(CanvasVideoBaseTexture.fromCanvasVideo(canvasvideo, scaleMode));
 };
 
 /**
