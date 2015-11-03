@@ -48,7 +48,6 @@ function VideoBaseTexture(source, scaleMode, autoplay)
     this.autoplay = autoplay != undefined ? autoplay : true;
 
     source.autoplay = this.autoplay;
-    console.log(source);
 
     BaseTexture.call(this, source, scaleMode);
 
