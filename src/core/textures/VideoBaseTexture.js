@@ -45,9 +45,12 @@ function VideoBaseTexture(source, scaleMode, autoplay)
         source.complete = true;
     }
 
-    BaseTexture.call(this, source, scaleMode);
-
     this.autoplay = autoplay != undefined ? autoplay : true;
+
+    source.autoplay = this.autoplay;
+    console.log(source);
+
+    BaseTexture.call(this, source, scaleMode);
 
     /**
      * Should the base texture automatically update itself, set to true by default
@@ -151,6 +154,29 @@ VideoBaseTexture.prototype._onCanPlay = function ()
  */
 VideoBaseTexture.prototype.destroy = function ()
 {
+    /* FIX-BECAUSE : amartin */
+    this.autoUpdate = false;
+
+    if (this.source instanceof HTMLVideoElement) {
+        this.source.preload = 'none';
+
+        // Remove <source> tags if any
+        var sources = this.source.querySelectorAll('source');
+        for (var i = sources.length - 1; i >= 0; i--) {
+            this.source.removeChild(sources[i]);
+        }
+
+        // Remove attributes if any
+        this.source.src = '';
+        this.source.removeAttribute('src');
+
+        // Properly unload video/audio
+        if (this.source.load instanceof Function) {
+            this.source.load();
+        }
+    }
+    /* </ FIX > */
+
     if (this.source && this.source._pixiId)
     {
         delete utils.BaseTextureCache[ this.source._pixiId ];
