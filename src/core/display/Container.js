@@ -1,6 +1,5 @@
 var math = require('../math'),
     DisplayObject = require('./DisplayObject'),
-    Sprite = require('../sprites/Sprite'),
     RenderTexture = require('../textures/RenderTexture'),
     _tempMatrix = new math.Matrix();
 
@@ -585,7 +584,7 @@ Container.prototype.destroy = function (destroyChildren, destroyTexture, destroy
     {
         for (var i = 0, j = this.children.length; i < j; ++i)
         {
-            if (this.children[i] instanceof Sprite) {
+            if (this.children[i] instanceof PIXI.Sprite) {
                 this.children[i].destroy(destroyTexture, destroyBaseTexture);
             } else {
                 this.children[i].destroy(destroyChildren);
