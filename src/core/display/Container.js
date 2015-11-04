@@ -574,8 +574,9 @@ Container.prototype.renderCanvas = function (renderer)
 /**
  * Destroys the container
  * @param [destroyChildren=false] {boolean} if set to true, all the children will have their destroy method called as well
+ * FIX-BECAUSE : amartin
  */
-Container.prototype.destroy = function (destroyChildren)
+Container.prototype.destroy = function (destroyChildren, destroyTexture, destroyBaseTexture)
 {
     DisplayObject.prototype.destroy.call(this);
 
@@ -583,7 +584,11 @@ Container.prototype.destroy = function (destroyChildren)
     {
         for (var i = 0, j = this.children.length; i < j; ++i)
         {
-            this.children[i].destroy(destroyChildren);
+            if (this.children[i] instanceof PIXI.Sprite) {
+                this.children[i].destroy(destroyTexture, destroyBaseTexture);
+            } else {
+                this.children[i].destroy(destroyChildren);
+            }
         }
     }
 
