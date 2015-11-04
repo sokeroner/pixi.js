@@ -1,7 +1,7 @@
 /**
  * @license
  * pixi.js - v3.0.8-dev
- * Compiled 2015-11-04T18:00:46.449Z
+ * Compiled 2015-11-04T18:30:17.548Z
  *
  * pixi.js is licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license.php
@@ -6142,8 +6142,9 @@ Container.prototype.renderCanvas = function (renderer)
 /**
  * Destroys the container
  * @param [destroyChildren=false] {boolean} if set to true, all the children will have their destroy method called as well
+ * FIX-BECAUSE : amartin
  */
-Container.prototype.destroy = function (destroyChildren)
+Container.prototype.destroy = function (destroyChildren, destroyTexture, destroyBaseTexture)
 {
     DisplayObject.prototype.destroy.call(this);
 
@@ -6151,7 +6152,11 @@ Container.prototype.destroy = function (destroyChildren)
     {
         for (var i = 0, j = this.children.length; i < j; ++i)
         {
-            this.children[i].destroy(destroyChildren);
+            if (this.children[i] instanceof PIXI.Sprite) {
+                this.children[i].destroy(destroyTexture, destroyBaseTexture);
+            } else {
+                this.children[i].destroy(destroyChildren);
+            }
         }
     }
 
@@ -18838,9 +18843,11 @@ function VideoBaseTexture(source, scaleMode, autoplay)
         source.complete = true;
     }
 
-    BaseTexture.call(this, source, scaleMode);
-
     this.autoplay = autoplay != undefined ? autoplay : true;
+
+    source.autoplay = this.autoplay;
+
+    BaseTexture.call(this, source, scaleMode);
 
     /**
      * Should the base texture automatically update itself, set to true by default
@@ -18944,6 +18951,29 @@ VideoBaseTexture.prototype._onCanPlay = function ()
  */
 VideoBaseTexture.prototype.destroy = function ()
 {
+    /* FIX-BECAUSE : amartin */
+    this.autoUpdate = false;
+
+    if (this.source instanceof HTMLVideoElement) {
+        this.source.preload = 'none';
+
+        // Remove <source> tags if any
+        var sources = this.source.querySelectorAll('source');
+        for (var i = sources.length - 1; i >= 0; i--) {
+            this.source.removeChild(sources[i]);
+        }
+
+        // Remove attributes if any
+        this.source.src = '';
+        this.source.removeAttribute('src');
+
+        // Properly unload video/audio
+        if (this.source.load instanceof Function) {
+            this.source.load();
+        }
+    }
+    /* </ FIX > */
+
     if (this.source && this.source._pixiId)
     {
         delete utils.BaseTextureCache[ this.source._pixiId ];
