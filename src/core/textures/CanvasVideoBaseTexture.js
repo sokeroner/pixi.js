@@ -12,17 +12,27 @@ function CanvasVideoBaseTexture(source, scaleMode)
     }
 
     BaseTexture.call(this, source.element, scaleMode);
-    source.addEventListener('timeupdate', _onUpdate);
+    source.addEventListener('timeupdate', this._onUpdate).bind(this);
 
-    function _onUpdate ()
-    {
-        that.update ();
-    }
 }
 
 CanvasVideoBaseTexture.prototype = Object.create(BaseTexture.prototype);
 CanvasVideoBaseTexture.prototype.constructor = CanvasVideoBaseTexture;
 module.exports = CanvasVideoBaseTexture;
+
+
+
+/**
+ * The internal update loop of the canvasvideo base texture.
+ *
+ * @private
+ */
+CanvasVideoBaseTexture.prototype._onUpdate = function ()
+{
+    this.update ();
+};
+
+
 
 /**
  * Helper function that creates a base texture from the given canvas element.
