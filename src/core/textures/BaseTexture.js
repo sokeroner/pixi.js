@@ -372,7 +372,7 @@ BaseTexture.prototype.updateSourceImage = function (newSrc)
  * @param [scaleMode=PIXI.SCALE_MODES.DEFAULT] {number} See {@link PIXI.SCALE_MODES} for possible values
  * @return PIXI.BaseTexture
  */
-BaseTexture.fromImage = function (imageUrl, crossorigin, scaleMode)
+BaseTexture.fromImage = function (imageUrl, crossorigin, scaleMode, resolution)
 {
     var baseTexture = utils.BaseTextureCache[imageUrl];
 
@@ -391,7 +391,7 @@ BaseTexture.fromImage = function (imageUrl, crossorigin, scaleMode)
             image.crossOrigin = '';
         }
 
-        baseTexture = new BaseTexture(image, scaleMode);
+        baseTexture = new BaseTexture(image, scaleMode, resolution);
         baseTexture.imageUrl = imageUrl;
 
         image.src = imageUrl;
@@ -413,7 +413,7 @@ BaseTexture.fromImage = function (imageUrl, crossorigin, scaleMode)
  * @param scaleMode {number} See {@link PIXI.SCALE_MODES} for possible values
  * @return PIXI.BaseTexture
  */
-BaseTexture.fromCanvas = function (canvas, scaleMode)
+BaseTexture.fromCanvas = function (canvas, scaleMode, resolution)
 {
     if (!canvas._pixiId)
     {
@@ -424,7 +424,7 @@ BaseTexture.fromCanvas = function (canvas, scaleMode)
 
     if (!baseTexture)
     {
-        baseTexture = new BaseTexture(canvas, scaleMode);
+        baseTexture = new BaseTexture(canvas, scaleMode, resolution);
         utils.BaseTextureCache[canvas._pixiId] = baseTexture;
     }
 

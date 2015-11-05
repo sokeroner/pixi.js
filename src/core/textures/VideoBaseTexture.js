@@ -30,7 +30,7 @@ var BaseTexture = require('./BaseTexture'),
  * @param [scaleMode] {number} See {@link PIXI.SCALE_MODES} for possible values
  * @param [autoplay=true] {boolean} Specifies if the video will start playing as soon as it is ready
  */
-function VideoBaseTexture(source, scaleMode, autoplay)
+function VideoBaseTexture(source, scaleMode, autoplay, resolution)
 {
     if (!source)
     {
@@ -49,7 +49,7 @@ function VideoBaseTexture(source, scaleMode, autoplay)
 
     source.autoplay = this.autoplay;
 
-    BaseTexture.call(this, source, scaleMode);
+    BaseTexture.call(this, source, scaleMode, resolution);
 
     /**
      * Should the base texture automatically update itself, set to true by default
@@ -194,7 +194,7 @@ VideoBaseTexture.prototype.destroy = function ()
  * @param [autoplay=true] {boolean} Specifies if the video will start playing as soon as it is ready
  * @return {PIXI.VideoBaseTexture}
  */
-VideoBaseTexture.fromVideo = function (video, scaleMode, autoplay)
+VideoBaseTexture.fromVideo = function (video, scaleMode, autoplay, resolution)
 {
     autoplay = autoplay != undefined ? autoplay : true;
 
@@ -207,7 +207,7 @@ VideoBaseTexture.fromVideo = function (video, scaleMode, autoplay)
 
     if (!baseTexture)
     {
-        baseTexture = new VideoBaseTexture(video, scaleMode, autoplay);
+        baseTexture = new VideoBaseTexture(video, scaleMode, autoplay, resolution);
         utils.BaseTextureCache[ video._pixiId ] = baseTexture;
     }
 
@@ -227,7 +227,7 @@ VideoBaseTexture.fromVideo = function (video, scaleMode, autoplay)
  * @param [autoplay=true] {boolean} Specifies if the video will start playing as soon as it is ready
  * @return {PIXI.VideoBaseTexture}
  */
-VideoBaseTexture.fromUrl = function (videoSrc, scaleMode, autoplay)
+VideoBaseTexture.fromUrl = function (videoSrc, scaleMode, autoplay, resolution)
 {
     autoplay = autoplay != undefined ? autoplay : true;
 
@@ -253,7 +253,7 @@ VideoBaseTexture.fromUrl = function (videoSrc, scaleMode, autoplay)
         video.play();
     }
 
-    return VideoBaseTexture.fromVideo(video, scaleMode, autoplay);
+    return VideoBaseTexture.fromVideo(video, scaleMode, autoplay, resolution);
 };
 
 VideoBaseTexture.fromUrls = VideoBaseTexture.fromUrl;

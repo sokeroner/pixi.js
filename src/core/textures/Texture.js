@@ -348,9 +348,9 @@ Texture.fromFrame = function (frameId)
  * @param scaleMode {number} See {@link PIXI.SCALE_MODES} for possible values
  * @return {PIXI.Texture}
  */
-Texture.fromCanvas = function (canvas, scaleMode)
+Texture.fromCanvas = function (canvas, scaleMode, resolution)
 {
-    return new Texture(BaseTexture.fromCanvas(canvas, scaleMode));
+    return new Texture(BaseTexture.fromCanvas(canvas, scaleMode, resolution));
 };
 
 /**
@@ -362,15 +362,15 @@ Texture.fromCanvas = function (canvas, scaleMode)
  * @param autoplay {boolean} Specifies if the video will start playing as soon as it is ready
  * @return {PIXI.Texture} A Texture
  */
-Texture.fromVideo = function (video, scaleMode, autoplay)
+Texture.fromVideo = function (video, scaleMode, autoplay, resolution)
 {
     if (typeof video === 'string')
     {
-        return Texture.fromVideoUrl(video, scaleMode, autoplay);
+        return Texture.fromVideoUrl(video, scaleMode, autoplay, resolution);
     }
     else
     {
-        return new Texture(VideoBaseTexture.fromVideo(video, scaleMode, autoplay));
+        return new Texture(VideoBaseTexture.fromVideo(video, scaleMode, autoplay, resolution));
     }
 };
 
@@ -383,9 +383,9 @@ Texture.fromVideo = function (video, scaleMode, autoplay)
  * @param autoplay {boolean} Specifies if the video will start playing as soon as it is ready
  * @return {PIXI.Texture} A Texture
  */
-Texture.fromVideoUrl = function (videoUrl, scaleMode, autoplay)
+Texture.fromVideoUrl = function (videoUrl, scaleMode, autoplay, resolution)
 {
-    return new Texture(VideoBaseTexture.fromUrl(videoUrl, scaleMode, autoplay));
+    return new Texture(VideoBaseTexture.fromUrl(videoUrl, scaleMode, autoplay, resolution));
 };
 
 /**
