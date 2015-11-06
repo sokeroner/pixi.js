@@ -12,7 +12,7 @@ function CanvasVideoBaseTexture(source, scaleMode)
     }
 
     BaseTexture.call(this, source.element, scaleMode);
-    source.addEventListener('timeupdate', this._onUpdate).bind(this);
+    source.addEventListener('timeupdate', this._onUpdate.bind(this));
 
 }
 
