@@ -349,7 +349,7 @@ InteractionManager.prototype.mapPositionToPoint = function ( point, x, y )
  */
 InteractionManager.prototype.processInteractive = function (point, displayObject, func, hitTest, interactive )
 {
-    if(!displayObject.visible)
+    if(!displayObject || !displayObject.visible)
     {
         return false;
     }
@@ -543,10 +543,7 @@ InteractionManager.prototype.onMouseMove = function (event)
  */
 InteractionManager.prototype.processMouseMove = function ( displayObject, hit )
 {
-    if(hit)
-    {
-        this.dispatchEvent( displayObject, 'mousemove', this.eventData);
-    }
+    this.dispatchEvent( displayObject, 'mousemove', this.eventData);
     this.processMouseOverOut(displayObject, hit);
 };
 
@@ -747,7 +744,7 @@ InteractionManager.prototype.onTouchMove = function (event)
         this.eventData.data = touchData;
         this.eventData.stopped = false;
 
-        this.processInteractive( touchData.global, this.renderer._lastObjectRendered, this.processTouchMove, false );
+        this.processInteractive( touchData.global, this.renderer._lastObjectRendered, this.processTouchMove, true );
 
         this.returnTouchData( touchData );
     }
@@ -762,10 +759,8 @@ InteractionManager.prototype.onTouchMove = function (event)
  */
 InteractionManager.prototype.processTouchMove = function ( displayObject, hit )
 {
-    if (hit)
-    {
-        this.dispatchEvent( displayObject, 'touchmove', this.eventData);
-    }
+    hit = hit;
+    this.dispatchEvent( displayObject, 'touchmove', this.eventData);
 };
 
 /**
